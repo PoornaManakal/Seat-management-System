@@ -69,3 +69,109 @@ public class Main {
             }
         } while (option!=0);
     }
+
+    public static void buySeat(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        String rowLetter = null;
+        boolean isRow = false ;
+
+        while (!isRow){
+            System.out.print("Enter the Row (A-D) : ");
+            rowLetter = scanner.next().toUpperCase();
+
+            for (String i : array){
+                if(rowLetter.equals(i)) {
+                    isRow = true;
+                    break;
+                }
+            }
+
+            if (!isRow){
+            System.out.println("invalid input");
+            }
+
+        }
+
+
+        System.out.print("Enter the seat number : ");
+        int seatNumber;
+        try {
+            seatNumber = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a valid seat number (an integer).");
+            scanner.next(); // Clear the invalid input
+            return;
+        }
+
+        int[] seat;
+
+        switch (rowLetter){
+            case "A":
+                seat=A;
+                break;
+            case "B":
+                seat=B;
+                break;
+            case "C":
+                seat=C;
+                break;
+            case "D":
+                seat=D;
+                break;
+            default:
+                System.out.println("Invalid Row letter !");
+                return;
+        }
+
+        if(seatNumber>=1 && seatNumber<= seat.length){
+            if (seat[seatNumber-1]==0){
+
+                System.out.print("Enter your name: ");
+                String name = scanner.next();
+                System.out.print("Enter your surname: ");
+                String surname = scanner.next();
+                System.out.print("Enter your email: ");
+                String email = scanner.next();
+
+                // Create a Person object
+                Person person = new Person(name, surname, email);
+
+                person.setName(name);
+                person.setSurname(surname);
+                person.setEmail(email);
+
+                // Calculate price
+                double price = price(seatNumber);
+
+                // Create a Ticket object
+                Ticket ticket = new Ticket(rowLetter, seatNumber, price, person);
+
+                ticket.setRow(rowLetter);
+                ticket.setSeat(seatNumber);
+                ticket.setPrice(price);
+                ticket.setPerson(person);
+
+                totalSales += price;
+
+                for( int i = 0; i < tickets.length; i++) {
+                    if(tickets[i] == null) {
+                        tickets[i] = ticket;
+                        break;
+                    }
+                }
+
+                seat[seatNumber-1]=1;
+                System.out.println("Seat booked successfully!");
+
+                person.printInfo();
+
+            }else {
+                System.out.println("This seat is already booked.");
+            }
+        }else {
+            System.out.println("Invalid seat number !");
+        }
+
+    }
