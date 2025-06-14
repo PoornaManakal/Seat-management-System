@@ -175,3 +175,83 @@ public class Main {
         }
 
     }
+
+    public static void cancelSeat(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        String rowLetter = null;
+        boolean isRow = false ;
+
+        while (!isRow){
+            System.out.print("Enter the Row (A-D) : ");
+            rowLetter = scanner.next().toUpperCase();
+
+            for (String i : array){
+                if(rowLetter.equals(i)) {
+                    isRow = true;
+                    break;
+                }
+            }
+
+            if (!isRow){
+                System.out.println("invalid input");
+            }
+
+        }
+
+        System.out.print("Enter the seat number : ");
+        int seatNumber;
+        try {
+            seatNumber = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a valid seat number (an integer).");
+            scanner.next(); // Clear the invalid input
+            return;
+        }
+
+        int[] seat;
+
+        switch (rowLetter){
+            case "A":
+                seat=A;
+                break;
+            case "B":
+                seat=B;
+                break;
+            case "C":
+                seat=C;
+                break;
+            case "D":
+                seat=D;
+                break;
+            default:
+                System.out.println("Invalid Row letter !");
+                return;
+        }
+
+        if (seatNumber >= 1 && seatNumber <= seat.length) {
+            if (seat[seatNumber - 1] == 1) {
+                seat[seatNumber - 1] = 0;
+
+
+                for (int i = 0; i < tickets.length; i++) {
+                    Ticket ticket = tickets[i];
+                    if (ticket != null && rowLetter.equals(ticket.getRow()) && seatNumber == ticket.getSeat()) {
+                        tickets[i] = null;
+                        break;
+                    }
+                }
+
+                double price = price(seatNumber);
+                totalSales -= price;
+
+                System.out.println(" Seat has canceled successfully");
+            } else {
+                System.out.println("This seat is not taken");
+            }
+        } else {
+            System.out.println("Invalid seat number !");
+        }
+
+    }
