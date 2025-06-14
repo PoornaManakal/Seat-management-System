@@ -255,3 +255,129 @@ public class Main {
         }
 
     }
+
+    public static void seatPlan(){
+        for (String row : array) {
+            switch (row) {
+                case "A":
+                    System.out.print("A :");
+                    printSeatRow(A);
+                    break;
+                case "B":
+                    System.out.print("B :");
+                    printSeatRow(B);
+                    System.out.println();
+                    break;
+                case "C":
+                    System.out.print("C :");
+                    printSeatRow(C);
+                    break;
+                case "D":
+                    System.out.print("D :");
+                    printSeatRow(D);
+                    break;
+            }
+        }
+    }
+    private static void printSeatRow(int[] seat) {
+        for (int j : seat) {
+            System.out.print(((j == 0) ? " O" : " X"));
+        }
+        System.out.println();
+    }
+    public static void firstAvailable() {
+        int findSeat = 0;
+        for (String row : array) {
+            int[] currentRow = switch (row) {
+                case "A" -> A;
+                case "B" -> B;
+                case "C" -> C;
+                case "D" -> D;
+                default -> null;
+            };
+            int i = 0;
+            while (true) {
+                assert currentRow != null;
+                if (!(i < currentRow.length)) break;
+                if (currentRow[i] == findSeat) {
+                    System.out.println("Row " + row + ", seat " + (i + 1) + " is Available");
+                    return;
+                }
+                i++;
+            }
+        }
+        System.out.println("No available seat found.");
+    }
+    public static double price(int seatNumber) {
+        if (seatNumber <= 5) {
+            return 200.00;
+        } else if (seatNumber <= 9) {
+            return 150.00;
+        }
+       else {
+            return 180.00;
+        }
+    }
+    public static void printTicketInfo(){
+        for (Ticket ticket : tickets) {
+            if (ticket != null) {
+                ticket.printTicketInfo();
+            }
+        }
+        System.out.println();
+
+        System.out.println(" Total sales : " + totalSales );
+    }
+    public static void searchTicket(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        String rowLetter = null;
+        boolean isRow = false ;
+
+        while (!isRow){
+            System.out.print("Enter the Row (A-D) : ");
+            rowLetter = scanner.next().toUpperCase();
+
+            for (String i : array){
+                if(rowLetter.equals(i)) {
+                    isRow = true;
+                    break;
+                }
+            }
+
+            if (!isRow){
+                System.out.println("invalid input");
+            }
+
+        }
+
+        System.out.print("Enter the seat number : ");
+        int seatNumber;
+        try {
+            seatNumber = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter a valid seat number (an integer).");
+            scanner.next();
+            return;
+        }
+
+        int i = 0;
+        boolean found = false;
+        while (i < tickets.length) {
+            Ticket ticket = tickets[i];
+            if (ticket != null && rowLetter.equals(ticket.getRow()) && seatNumber == ticket.getSeat()) {
+                ticket.printTicketInfo();
+                found = true;
+                break;
+            }
+            i++;
+        }
+
+        if (!found) {
+            System.out.println("Seat is available");
+        }
+
+    }
+
+}
